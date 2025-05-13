@@ -1,0 +1,247 @@
+/* style.qss  */
+
+/* Общие параметры */
+* {
+    /* шрифт с лёгкими засечками, цвет тёмно-коричневый */
+    font-family: Consolas, monospace;
+    font-size: 18px;
+    color: #4b3b28;
+}
+
+QMainWindow {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+QDialog {
+    background-color: rgba(255, 248, 220, 230);
+}
+
+QPushButton {
+    background-color: rgba(255, 248, 220, 200);
+    border: 1px solid #8b7d6b;
+    border-radius: 6px;
+    padding: 6px 12px;
+    min-height: 28px;
+}
+QPushButton:hover {
+    background-color: rgba(225, 213, 168, 240);
+}
+QPushButton:pressed {
+    background-color:rgba(213, 202, 158, 240);
+    
+}
+
+QPushButton#btnDeleteScenario {
+    color: #900;
+}
+QPushButton#btnDeleteScenario:hover {
+    background-color: rgba(255, 200, 200, 200);
+}
+
+/* Поля ввода, текстовые области и списки */
+QLineEdit,
+QTextEdit,
+QListWidget {
+    background-color: rgba(255, 250, 240, 200);
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+
+/* Вкладки */
+QTabWidget::pane {
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    border-top-left-radius: 0px;
+    margin-top: -1px;  
+    padding: 4px;
+    background:rgba(255, 249, 231, 255);
+}
+
+/* Базовый стиль вкладок */
+QTabBar::tab {
+    background: rgba(255, 248, 220, 137);
+    border: 1px solid #8b7d6b;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 4px 12px;
+    margin-right: -1px;  
+    width: 110px;
+}
+
+/* Для последней вкладки правая граница */
+QTabBar::tab:last {
+    border-right: 1px solid #8b7d6b;
+    margin-right: 0;
+}
+
+/* Невыбранные вкладки */
+QTabBar::tab:!selected {
+    margin-top: 2px;  
+    background: rgba(255, 248, 220, 99);
+}
+
+/* Выбранная вкладка */
+QTabBar::tab:selected {
+    background:rgba(255, 249, 231, 255);
+    border-bottom: 1px solid rgba(255, 248, 220, 180);  
+    margin-bottom: -3px;  
+}
+
+
+/* Разделители сплиттера */
+QSplitter::handle:horizontal {
+    background-color: #8b7d6b;
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    background-color: #8b7d6b;
+    height: 1px;
+}
+
+/* Скроллбары */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: rgba(255,248,220,150);
+    width: 12px;
+    margin: 0px;
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(200,180,140,200);
+    border-radius: 6px;
+    min-height: 20px;
+}
+QScrollBar::add-line, QScrollBar::sub-line {
+    background: none;
+    height: 0px;
+}
+QPushButton#btnRemoveGenre {
+    color: red;
+}
+QPushButton#btnRemoveGenre:hover {
+    background-color: #FFCCCC;
+}
+
+
+/* Основной combobox */
+QComboBox {
+    color: #4b3b28;                                  /* цвет текста */
+    background-color: rgba(255, 250, 240, 200);
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    padding: 4px 8px;
+    padding-right: 10px;
+    min-height: 30px;
+}
+
+/* Кнопка-стрелка */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #8b7d6b;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QComboBox::down-arrow {
+    image: url(resources/icons/arrow_down.png);
+    width: 14px;
+    height: 14px;
+}
+
+/* Выпадающий список */
+QComboBox QAbstractItemView {
+    color: #4b3b28;                                  /* текст тоже темный */
+    background-color: rgba(255, 250, 240, 230);
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    padding: 0;                                      /* чтобы selection упирался в края */
+}
+
+/* Отступы внутри каждого пункта */
+QComboBox QAbstractItemView::item {
+    padding: 8px 12px;
+}
+
+/* Расстояние между пунктами */
+QComboBox QAbstractItemView {
+    spacing: 4px;
+}
+
+/* Hover и Selected: чуть темнее */
+QComboBox QAbstractItemView::item:hover,
+QComboBox QAbstractItemView::item:selected {
+    background-color: #8b7d6b;
+}
+
+/* Применяем тот же стиль popup к впадающему списку внутри QInputDialog */
+QInputDialog QComboBox {
+    color: #4b3b28;
+    background-color: rgba(255, 250, 240, 200);
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    padding: 4px 8px;
+    padding-right: 10px;
+    min-height: 30px;
+}
+
+QInputDialog QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #8b7d6b;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QInputDialog QComboBox::down-arrow {
+    image: url(resources/icons/arrow_down.png);
+    width: 14px;
+    height: 14px;
+}
+
+QInputDialog QComboBox QAbstractItemView {
+    color: #4b3b28;
+    background-color: rgba(255, 250, 240, 230);
+    border: 1px solid #8b7d6b;
+    border-radius: 4px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    padding: 0;
+    spacing: 4px;
+}
+
+QInputDialog QComboBox QAbstractItemView::item {
+    padding: 8px 12px;
+}
+
+QInputDialog QComboBox QAbstractItemView::item:hover,
+QInputDialog QComboBox QAbstractItemView::item:selected {
+    background-color: #8b7d6b;
+}
+
+/* Стили для QSplitter */
+QSplitter::handle {
+    background-color: #8b7d6b;
+}
+
+QSplitter::handle:horizontal {
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    height: 1px;
+}
+
+/* Стили для EventForm */
+QPushButton#btn_save, QPushButton#btn_cancel {
+    width: 200px;
+}
