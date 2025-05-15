@@ -22,18 +22,15 @@ class ArtifactController:
         self.tab.art_list.currentItemChanged.connect(self.on_art_selected)
 
     def load_artifacts(self):
-        """Загружает артефакты текущего сценария в алфавитном порядке (без учета регистра)."""
         scen = self._get_scenario()
         if not scen:
             return
-
-        # Получаем артефакты и сортируем по имени без учета регистра
+        # сортировка артефактов
         artifacts = (Artifact
                     .select()
                     .where(Artifact.scenario == scen)
                     .order_by(Artifact.name.collate('NOCASE')))
 
-        # Обновляем список артефактов
         lw = self.tab.art_list
         lw.clear()
         for art in artifacts:
@@ -41,13 +38,12 @@ class ArtifactController:
             it.setData(Qt.UserRole, art.id)
             lw.addItem(it)
 
-        # Сбрасываем детали
         self.tab.art_title.clear()
         self.tab.art_desc.clear()
         self.tab.art_note.clear()
 
+    # выбранный артефакт
     def on_art_selected(self, current, previous):
-        """При выборе артефакта показывает его название, описание и заметку."""
         if not current:
             self.tab.art_title.clear()
             self.tab.art_desc.clear()
@@ -60,8 +56,8 @@ class ArtifactController:
         self.tab.art_desc.setPlainText(art.description or "")
         self.tab.art_note.setPlainText(art.note or "")
 
+    # окно создания артефакта
     def on_new_artifact(self):
-        """Открывает немодальное окно создания артефакта."""
         scen = self._get_scenario()
         if not scen:
             WarningDialog(
@@ -75,8 +71,8 @@ class ArtifactController:
         form.saved.connect(self._create_artifact)
         form.show()
 
+    # создание артефакта и обновление списка
     def _create_artifact(self, data):
-        """Создает новый артефакт и обновляет список."""
         try:
             Artifact.create(**data)
             self.load_artifacts()
@@ -87,8 +83,8 @@ class ArtifactController:
                 message=f"Не удалось создать артефакт: {str(e)}"
             ).exec_()
 
+    # окно редатирования артефакта
     def on_edit_artifact(self):
-        """Открывает немодальное окно редактирования артефакта."""
         sel = self.tab.art_list.currentItem()
         if not sel:
             WarningDialog(
@@ -108,8 +104,8 @@ class ArtifactController:
         form.saved.connect(lambda data, art=art: self._update_artifact(art, data))
         form.show()
 
+    # обновление данных артефакта
     def _update_artifact(self, art, data):
-        """Обновляет данные артефакта и обновляет список."""
         try:
             for key, val in data.items():
                 setattr(art, key, val)
@@ -122,8 +118,8 @@ class ArtifactController:
                 message=f"Не удалось обновить артефакт: {str(e)}"
             ).exec_()
 
+    # удаление артефакта с окном подтверждения
     def on_delete_artifact(self):
-        """Удаляет артефакт с подтверждением."""
         sel = self.tab.art_list.currentItem()
         if not sel:
             WarningDialog(
