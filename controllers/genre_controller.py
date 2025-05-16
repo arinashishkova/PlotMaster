@@ -34,8 +34,8 @@ class GenreController:
             self.current_scenario = None
             self.view.scenario.genre_list.clear()
 
+    # загрузка жанров к выбраному сценарию
     def load_genres(self):
-        """Загружает жанры текущего сценария в список."""
         lw = self.view.scenario.genre_list
         lw.clear()
         for sg in ScenarioGenre.select().where(ScenarioGenre.scenario == self.current_scenario):
@@ -44,8 +44,8 @@ class GenreController:
             itm.setData(Qt.UserRole, g.id)
             lw.addItem(itm)
 
+    # открытие окна создания жанра
     def on_new_genre(self):
-        """Открывает немодальное окно создания жанра."""
         form = GenreForm(parent=self.view)
         form.saved.connect(self._create_genre)
         form.show()
@@ -65,8 +65,8 @@ class GenreController:
                 message=f"Жанр «{name}» уже есть в списке."
             ).exec_()
 
+    # добавление жанра к теккущему сценарию
     def on_add_genre(self):
-        """Добавляет существующий жанр к текущему сценарию через форму с QComboBox."""
         if not self.current_scenario:
             WarningDialog(
                 parent=self.view,
@@ -88,10 +88,10 @@ class GenreController:
             exclude_ids=used_ids
         )
         form.saved.connect(self._add_genre)
-        form.show()  # <- вместо exec_()
+        form.show() 
 
+    # привязывание жанра к сценарию и обновление списка
     def _add_genre(self, genre):
-        """Слот: привязать выбранный жанр к сценарию и обновить список."""
         try:
             ScenarioGenre.create(scenario=self.current_scenario, genre=genre)
             self.load_genres()
@@ -108,8 +108,8 @@ class GenreController:
                 message=f"Не удалось добавить жанр: {e}"
             ).exec_()
 
+    # удаление жанра из сценария
     def on_remove_genre(self):
-        """Удаляет жанр из связей с текущим сценарием."""
         sel = self.view.scenario.genre_list.currentItem()
         if not sel:
             WarningDialog(
