@@ -13,17 +13,15 @@ class ManageGenreController:
         self.parent = parent
         self.form = form
         
-        # загрузить из базы
         self.load_genres()
         
-        # сигналы
         f = self.form
         f.btn_new.clicked.connect(self.on_new)
         f.btn_edit.clicked.connect(self.on_edit)
         f.btn_delete.clicked.connect(self.on_delete)
 
+    # загрузка всех жанров
     def load_genres(self):
-        """Загружает список всех жанров."""
         lw = self.form.list
         lw.clear()
         for g in Genre.select().order_by(Genre.name):
@@ -31,14 +29,14 @@ class ManageGenreController:
             it.setData(Qt.UserRole, g.id)
             lw.addItem(it)
 
+    # открытие окна создания жанра
     def on_new(self):
-        """Открывает немодальное окно создания жанра."""
         form = GenreForm(parent=self.parent)
         form.saved.connect(self._create_genre)
         form.show()
 
+    # создание жанра и обновления списка
     def _create_genre(self, data):
-        """Слот: создавать новый жанр и обновлять списки."""
         name = data.get('name', '').strip()
         if not name:
             return
@@ -53,8 +51,8 @@ class ManageGenreController:
                 f"Жанр «{name}» уже есть в списке."
             )
 
+    # открытия окна немодального жанра
     def on_edit(self):
-        """Открывает немодальное окно редактирования выбранного жанра."""
         sel = self.form.list.currentItem()
         if not sel:
             QMessageBox.warning(self.form, "Внимание", "Выберите жанр для редактирования")
@@ -66,8 +64,8 @@ class ManageGenreController:
         form.saved.connect(lambda data, g=g: self._update_genre(g, data))
         form.show()
 
+    # сохранение жанра и обновление списков
     def _update_genre(self, genre, data):
-        """Слот: сохраняем изменения жанра и обновляем списки."""
         name = data.get('name', '').strip()
         if not name:
             return
@@ -83,8 +81,8 @@ class ManageGenreController:
                 f"Жанр «{name}» уже есть в списке."
             )
 
+    # удаление жанра с подтверждением
     def on_delete(self):
-        """Удаляет жанр с подтверждением."""
         sel = self.form.list.currentItem()
         if not sel:
             QMessageBox.warning(self.form, "Внимание", "Выберите жанр для удаления")
