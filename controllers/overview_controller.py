@@ -8,16 +8,11 @@ from models.artifact import Artifact
 from models.location import Location
 
 class OverviewController:
-    """
-    Контроллер для генерации HTML-содержимого сценария.
-    """
+    # контроллер генерации содержимого
     def __init__(self, scenario):
         self.scenario = scenario
 
     def generate_html(self) -> str:
-        """
-        Собирает и возвращает HTML-представление сценария.
-        """
         s = self.scenario
         parts = []
 
