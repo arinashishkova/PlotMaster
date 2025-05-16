@@ -21,8 +21,8 @@ class CharacterController:
         self.tab.btn_delete_char.clicked.connect(self.on_delete_character)
         self.tab.char_list.currentItemChanged.connect(self.on_char_selected)
 
+    # Загрузка персонажей
     def load_characters(self):
-        """Загружает персонажей текущего сценария в алфавитном порядке (без учета регистра)."""
         scen = self._get_scenario()
         if not scen:
             return
@@ -60,7 +60,6 @@ class CharacterController:
 
     # Остальные методы остаются без изменений
     def on_char_selected(self, current, previous):
-        """При выборе персонажа показывает его имя, роль, описание и заметку."""
         if not current:
             self.tab.lbl_char_name.clear()
             self.tab.lbl_char_role.clear()
@@ -75,8 +74,8 @@ class CharacterController:
         self.tab.char_desc.setPlainText(ch.description or "")
         self.tab.char_note.setPlainText(ch.note or "")
 
+    # Открытие окна пресонажа при редактировании
     def on_new_character(self):
-        """Открывает немодальное окно создания персонажа."""
         scen = self._get_scenario()
         if not scen:
             WarningDialog(
@@ -90,8 +89,8 @@ class CharacterController:
         form.saved.connect(self._create_character)
         form.show()
 
+    #Создание нового персонажа
     def _create_character(self, data):
-        """Создает нового персонажа и обновляет списки."""
         try:
             Character.create(**data)
             self.load_characters()
@@ -102,8 +101,8 @@ class CharacterController:
                 message=f"Не удалось создать персонажа: {str(e)}"
             ).exec_()
 
+    # Открывает окно редактирования выбранного персонажа
     def on_edit_character(self):
-        """Открывает немодальное окно редактирования персонажа."""
         sel = self.tab.char_list.currentItem()
         if not sel:
             WarningDialog(
@@ -123,8 +122,8 @@ class CharacterController:
         form.saved.connect(lambda data, ch=ch: self._update_character(ch, data))
         form.show()
 
+    # обновляет данные персонажа
     def _update_character(self, ch, data):
-        """Обновляет данные персонажа и обновляет списки."""
         try:
             for key, val in data.items():
                 setattr(ch, key, val)
@@ -137,8 +136,8 @@ class CharacterController:
                 message=f"Не удалось обновить персонажа: {str(e)}"
             ).exec_()
 
+    # удаление персонажа с подтверждением
     def on_delete_character(self):
-        """Удаляет персонажа с подтверждением."""
         sel = self.tab.char_list.currentItem()
         if not sel:
             WarningDialog(
