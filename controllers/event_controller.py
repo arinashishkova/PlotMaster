@@ -23,8 +23,8 @@ class EventController:
         self.tab.btn_delete_ev.clicked.connect(self.on_delete_event)
         self.tab.ev_list.currentItemChanged.connect(self.on_event_selected)
 
+    # загрузка событий в сценраий 
     def load(self):
-        """Загружает события текущего сценария."""
         scen = self._get_scenario()
         lw = self.tab.ev_list
         lw.clear()
@@ -40,8 +40,8 @@ class EventController:
             lw.addItem(it)
         self._clear_details()
 
+    # очищает поля с деталями события
     def _clear_details(self):
-        """Очищает поля с деталями события."""
         self.tab.ev_title.clear()
         self.tab.ev_loc.clear()
         self.tab.ev_chars_lbl.clear()
@@ -49,8 +49,8 @@ class EventController:
         self.tab.ev_desc.clear()
         self.tab.ev_note.clear()
 
+    # заполняет событие при выборе деталями
     def on_event_selected(self, current, previous):
-        """При выборе события заполняет детали."""
         if not current:
             self._clear_details()
             return
@@ -77,13 +77,14 @@ class EventController:
         self.tab.ev_desc.setPlainText(ev.description or "")
         self.tab.ev_note.setPlainText(ev.note or "")
 
+    # открытие формы создания нового события
     def on_new_event(self):
-        """Открывает форму создания нового события."""
         scen = self._get_scenario()
         form = EventForm(parent=self.view, scenario_id=scen.id)
         form.saved.connect(lambda data, f=form: self._create_event(data, f))
         form.show()
 
+    
     def _create_event(self, data, form):
         """Слот: создаёт событие и связи по выбору в форме."""
         ev = Event.create(**data)
@@ -108,8 +109,8 @@ class EventController:
 
         self.load()
 
+    # форма редактирования выбранного соытия
     def on_edit_event(self):
-        """Открывает форму редактирования существующего события."""
         sel = self.tab.ev_list.currentItem()
         if not sel:
             dlg = WarningDialog(parent=self.view, title="Внимание", message="Выберите событие для редактирования")
@@ -121,8 +122,8 @@ class EventController:
         form.saved.connect(lambda data, ev=ev, f=form: self._update_event(ev, data, f))
         form.show()
 
+    # обновление формы редактирования
     def _update_event(self, ev, data, form):
-        """Слот: сохраняет изменения события и обновляет связи."""
         for key, val in data.items():
             setattr(ev, key, val)
         ev.save()
@@ -149,8 +150,8 @@ class EventController:
 
         self.load()
 
+    # удаление события с подтверждением
     def on_delete_event(self):
-        """Удаляет выбранное событие после подтверждения."""
         sel = self.tab.ev_list.currentItem()
         if not sel:
             dlg = WarningDialog(parent=self.view, title="Внимание", message="Выберите событие для удаления")
