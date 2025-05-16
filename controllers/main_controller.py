@@ -32,8 +32,8 @@ class MainController:
         # Стартовый экран
         self.view.show_welcome()
 
+    # инициализация всех контроллеров
     def init_controllers(self):
-        """Инициализация всех контроллеров"""
         self.scenario_ctrl = ScenarioController(
             view=self.view,
             on_select_fn=self.show_scenario_detail,
@@ -77,8 +77,8 @@ class MainController:
             scenario_controller=self.scenario_ctrl
         )
 
+    # настройка соединения сигналов
     def setup_navigation(self):
-        """Настройка соединений сигналов и слотов"""
         w = self.view.welcome
         w.btn_start.clicked.connect(self.handle_start)
         w.btn_about.clicked.connect(self.view.show_about)
@@ -89,19 +89,19 @@ class MainController:
         self.view.detail.btn_back.clicked.connect(self.view.show_scenario)
         self.view.detail.btn_overview.clicked.connect(self.show_overview)
 
+    # кнопка "нажать"
     def handle_start(self):
-        """Обработчик кнопки 'Начать'"""
         self.scenario_ctrl.load_scenarios()
         self.view.show_scenario()
-    
+
+    # закрытие приложения с подтверждением
     def exit_app(self):
-        """Закрытие приложения с подтверждением"""
         msg_box = QMessageBox(self.view)
         msg_box.setWindowTitle('Подтверждение выхода')
         msg_box.setText('Вы уверены, что хотите выйти из программы?')
         msg_box.setIcon(QMessageBox.Question)
         
-        # Настройка русскоязычных кнопок
+        # Настройка кнопок
         yes_button = msg_box.addButton("Да", QMessageBox.YesRole)
         no_button = msg_box.addButton("Нет", QMessageBox.NoRole)
         msg_box.setDefaultButton(no_button)
@@ -111,8 +111,8 @@ class MainController:
         if msg_box.clickedButton() == yes_button:
             self.view.close()
 
+    # отображения деталец сценария
     def show_scenario_detail(self, scen: Scenario):
-        """Показ деталей сценария"""
         self.current_scenario = scen
 
         dp = self.view.detail
@@ -122,11 +122,10 @@ class MainController:
 
         # Обновление всех вкладок
         self.update_all_tabs()
-        
         self.view.show_detail()
 
+    # обновление вкладок данных
     def update_all_tabs(self):
-        """Обновление всех вкладок данных"""
         self.character_ctrl.load_characters()
         self.chapter_ctrl.load_chapters()
         self.art_ctrl.load_artifacts()
@@ -135,17 +134,15 @@ class MainController:
         self.genre_ctrl.load_genres()
         self.relation_ctrl.load_relations()
 
+    # открытие формы управления жанрами
     def open_manage_genres(self):
-        """Открытие формы управления жанрами"""
         form = GenreManagementForm(parent=self.view)
         form.show()
-        
-        # Обновляем список жанров в текущем сценарии, если он выбран
         if self.current_scenario:
             self.genre_ctrl.load_genres()
-
+            
+    # полный обзор сценария
     def show_overview(self):
-        """Показ полного обзора сценария"""
         if not self.current_scenario:
             QMessageBox.warning(self.view, "Внимание", "Сначала выберите сценарий")
             return
