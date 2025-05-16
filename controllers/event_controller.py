@@ -84,9 +84,8 @@ class EventController:
         form.saved.connect(lambda data, f=form: self._create_event(data, f))
         form.show()
 
-    
+    # создание событий и связи по выбранной форме
     def _create_event(self, data, form):
-        """Слот: создаёт событие и связи по выбору в форме."""
         ev = Event.create(**data)
 
         # Собираем выбранные ID персонажей и артефактов
