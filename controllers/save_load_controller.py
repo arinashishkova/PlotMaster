@@ -21,11 +21,6 @@ from widgets.message_dialog import WarningDialog
 
 class SaveLoadController:
     def __init__(self, view, scenario_controller):
-        """
-        view                 — экземпляр MainWindow
-        scenario_controller  — ваш ScenarioController, чтобы после загрузки
-                               перезагрузить список сценариев
-        """
         self.view                = view
         self.scenario_controller = scenario_controller
 
@@ -85,7 +80,7 @@ class SaveLoadController:
         if not path:
             return
 
-        # 1) читаем JSON
+        # читаем JSON
         try:
             with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -98,7 +93,7 @@ class SaveLoadController:
             dlg.exec_()
             return
 
-        # 2) импортируем в БД
+        # импортируем в БД
         try:
             new_scenario = self._import(data)
         except Exception as e:
@@ -118,7 +113,7 @@ class SaveLoadController:
                 lw.setCurrentRow(i)
                 break
 
-        # 4) показываем сообщение об успехе
+        #  показываем сообщение об успехе
         dlg = WarningDialog(
             parent=self.view,
             title="Готово",
@@ -195,8 +190,8 @@ class SaveLoadController:
             ]
         }
 
+    # импорт сценрария
     def _import(self, data):
-        """Импортирует сценарий из dict, возвращает новый Scenario."""
         scen = Scenario.create(
             title       = data["title"],
             description = data.get("description"),
