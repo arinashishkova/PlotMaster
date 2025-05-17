@@ -24,6 +24,7 @@ class ScenarioController:
         sp.btn_continue.clicked.connect(self.on_continue_scenario)
         sp.btn_manage_genres.clicked.connect(self.on_manage_genres)
 
+    # загрузка списка сценариев
     def load_scenarios(self):
         """Загружает список всех сценариев."""
         lw = self.view.scenario.list
@@ -34,15 +35,15 @@ class ScenarioController:
             lw.addItem(item)
         self.clear_scenario_details()
 
+    # очищаем поля заметоу/жанров
     def clear_scenario_details(self):
-        """Очищает поля описания/заметок/жанров."""
         sp = self.view.scenario
         sp.desc_view.clear()
         sp.note_view.clear()
         sp.genre_list.clear()
 
+    # показывает данные сценария
     def display_scenario_details(self, current, previous):
-        """Показывает описание/заметки/жанры выбранного сценария."""
         if not current:
             return self.clear_scenario_details()
 
@@ -56,8 +57,8 @@ class ScenarioController:
         for sg in scen.scenario_genres:
             sp.genre_list.addItem(sg.genre.name)
 
+    # открывтие формы нового сценария
     def on_new_scenario(self):
-        """Новый сценарий через ScenarioForm."""
         form = ScenarioForm(parent=self.view)
 
         def _save(data):
@@ -76,8 +77,8 @@ class ScenarioController:
         form.saved.connect(_save)
         form.show()
 
+    # редактирование выбранного сценария
     def on_edit_scenario(self):
-        """Редактирует выбранный сценарий."""
         current = self.view.scenario.list.currentItem()
         if not current:
             WarningDialog(
@@ -110,8 +111,9 @@ class ScenarioController:
         form.saved.connect(_save)
         form.show()
 
+    
+    # удаление ценария с подтверждением
     def on_delete_scenario(self):
-        """Удаляет выбранный сценарий с подтверждением."""
         current = self.view.scenario.list.currentItem()
         if not current:
             WarningDialog(
@@ -143,8 +145,8 @@ class ScenarioController:
                     QMessageBox.Ok
                 )
 
+    # прожолжение работы с выбранвм сценарием
     def on_continue_scenario(self):
-        """Переходит к работе с выбранным сценарием."""
         current = self.view.scenario.list.currentItem()
         if not current:
             WarningDialog(
