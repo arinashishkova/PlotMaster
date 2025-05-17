@@ -12,10 +12,6 @@ from models.character import Character
 
 class RelationController:
     def __init__(self, view, get_current_scenario_fn):
-        """
-        view                  — экземпляр MainWindow
-        get_current_scenario_fn — функция, возвращающая текущий Scenario
-        """
         self.view          = view
         self._get_scenario = get_current_scenario_fn
         self.tab           = self.view.detail.relations_tab
@@ -28,10 +24,6 @@ class RelationController:
         self.tab.btn_delete.clicked.connect(self.on_delete_relation)
 
     def load_relations(self):
-        """
-        Перезагрузить всё содержимое вкладки «Связи» для текущего выбранного персонажа.
-        Вызывается из MainController.update_all_tabs().
-        """
         # Сбрасываем список типов и участников
         self.tab.rel_type_list.clear()
         self.tab.participants_list.clear()
@@ -39,17 +31,14 @@ class RelationController:
         current = self.tab.char_list.currentItem()
         self.on_char_selected(current, None)
 
+    # При выборе персонажа, показывает список связей
     def on_char_selected(self, current, previous):
-        """
-        При выборе персонажа-источника заполняем список типов связей, которые у него есть.
-        """
         self.tab.rel_type_list.clear()
         self.tab.participants_list.clear()
         if not current:
             return
 
         source_id = current.data(Qt.UserRole)
-        # Все RelationType, в которые этот персонаж участвует как source
         types = (RelationType
                  .select()
                  .join(CharacterRelation)
@@ -60,10 +49,8 @@ class RelationController:
             item.setData(Qt.UserRole, rt.id)
             self.tab.rel_type_list.addItem(item)
 
+    # При выборе связи показывае участников связи
     def on_relation_type_selected(self, current, previous):
-        """
-        При выборе типа связи показываем участников этой связи.
-        """
         self.tab.participants_list.clear()
         if not current:
             return
@@ -85,8 +72,8 @@ class RelationController:
             item.setData(Qt.UserRole, tgt.id)
             self.tab.participants_list.addItem(item)
 
+    # Открывает форму сохдания новой связи
     def on_add_relation(self):
-        """Открыть форму создания новой связи."""
         src_item = self.tab.char_list.currentItem()
         if not src_item:
             QMessageBox.warning(self.view, "Внимание", "Сначала выберите персонажа-источник")
@@ -103,16 +90,16 @@ class RelationController:
         )
         form.show()
 
+    #
     def _create_relation(self, source_id, rel_type_name, target_ids):
-        """Слот: создаём RelationType (или берём существующий) и связи CharacterRelation."""
         scen = self._get_scenario()
         rt, _ = RelationType.get_or_create(name=rel_type_name, scenario=scen)
         for tid in target_ids:
             CharacterRelation.create(source=source_id, target=tid, relation_type=rt)
         self.load_relations()
 
+    # Открываем форму редактирования выбранного типа связи
     def on_edit_relation(self):
-        """Открыть форму редактирования выбранного типа связи."""
         src_item  = self.tab.char_list.currentItem()
         type_item = self.tab.rel_type_list.currentItem()
         if not src_item or not type_item:
@@ -133,11 +120,8 @@ class RelationController:
         )
         form.show()
 
+    # Обновляем тип связи
     def _update_relation(self, source_id, old_rt, new_name, target_ids):
-        """
-        Слот: обновляем имя типа связи (если изменилось) и участников.
-        Старые связи по old_rt удаляются.
-        """
         scen = self._get_scenario()
         # Если имя изменилось — создаём/получаем новый RelationType
         if new_name != old_rt.name:
@@ -157,8 +141,8 @@ class RelationController:
 
         self.load_relations()
 
+    # Удаление типа связи с подтверждением
     def on_delete_relation(self):
-        """Удаляет тип связи с подтверждением"""
         src_item = self.tab.char_list.currentItem()
         type_item = self.tab.rel_type_list.currentItem()
         
