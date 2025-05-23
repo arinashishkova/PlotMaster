@@ -16,11 +16,6 @@ PlotMaster — настольное PyQt5-приложение для управ
 
 ## Установка
 
-```bash
-# клонируем репозиторий
-git clone https://github.com/YourUser/PlotMaster.git
-cd PlotMaster
-
 # создаём venv
 python -m venv venv
 source venv/bin/activate   # Linux/macOS
